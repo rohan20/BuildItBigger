@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,17 @@ import static com.rohan.androidjoketeller.JokeTellerActivity.JOKE_EXTRA_STRING;
 
 public class MainActivity extends AppCompatActivity {
 
+    public ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Fetching joke...");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
     }
 
 
@@ -47,9 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
 //        Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(MainActivity.this, JokeTellerActivity.class);
-        i.putExtra(JOKE_EXTRA_STRING, new JokeTeller().getJoke());
-        startActivity(i);
+
+//        Intent i = new Intent(MainActivity.this, JokeTellerActivity.class);
+//        i.putExtra(JOKE_EXTRA_STRING, new JokeTeller().getJoke());
+//        startActivity(i);
+
+        mProgressDialog.show();
+        new JokeEndPointAsyncTask().execute(this);
     }
 
 
